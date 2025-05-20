@@ -1,15 +1,16 @@
-# Terraform Cloud Getting Started Guide Example
+# Meraki Anonymised Data API
 
-This is an example Terraform configuration intended for use with the [Terraform Cloud Getting Started Guide](https://learn.hashicorp.com/terraform/cloud-gettingstarted/tfc_overview).
+This configuration builds a simple pipeline on AWS using Terraform. It exposes an API Gateway endpoint that triggers a Lambda function to query the Meraki API, anonymise the response and store the results in an S3 bucket. Another endpoint can be used by authorised users to retrieve the latest anonymised data.
 
-## What will this do?
+## Requirements
 
-This is a Terraform configuration that will create an EC2 instance in your AWS account. 
+* AWS credentials with permission to create Lambda, API Gateway and S3 resources.
+* A Meraki API key and organisation ID.
 
-When you set up a Workspace on Terraform Cloud, you can link to this repository. Terraform Cloud can then run `terraform plan` and `terraform apply` automatically when changes are pushed. For more information on how Terraform Cloud interacts with Version Control Systems, see [our VCS documentation](https://www.terraform.io/docs/cloud/run/ui.html).
+## Usage
 
-## What are the prerequisites?
+Provide your AWS credentials using environment variables or your chosen authentication method. Set `meraki_api_key` and `meraki_org_id` variables either via Terraform Cloud workspace variables or a `terraform.tfvars` file.
 
-You must have an AWS account and provide your AWS Access Key ID and AWS Secret Access Key to Terraform Cloud. Terraform Cloud encrypts and stores variables using [Vault](https://www.vaultproject.io/). For more information on how to store variables in Terraform Cloud, see [our variable documentation](https://www.terraform.io/docs/cloud/workspaces/variables.html).
+Run `terraform init` and `terraform apply` to deploy. The outputs will include the API base URL and an API key to access the `/data` endpoint.
 
-The values for `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` should be saved as environment variables on your workspace.
+The `/collect` endpoint does not require an API key and, when invoked, will fetch data from Meraki, anonymise it and save it to the S3 bucket. Use the `/data` endpoint with the provided API key to retrieve the stored anonymised JSON.

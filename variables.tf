@@ -1,18 +1,30 @@
-# Copyright (c) HashiCorp, Inc.
-# SPDX-License-Identifier: MPL-2.0
-
 variable "region" {
   description = "AWS region"
   default     = "us-west-1"
 }
 
-variable "instance_type" {
-  description = "Type of EC2 instance to provision"
-  default     = "t2.micro"
+variable "meraki_api_key" {
+  description = "Meraki API key"
+  type        = string
+  sensitive   = true
 }
 
-variable "instance_name" {
-  description = "EC2 instance name"
-  default     = "Provisioned by Terraform"
+variable "meraki_org_id" {
+  description = "Meraki organization ID"
+  type        = string
 }
 
+variable "collect_lambda_name" {
+  description = "Name of the lambda function that collects data"
+  default     = "meraki-collect"
+}
+
+variable "serve_lambda_name" {
+  description = "Name of the lambda that serves anonymised data"
+  default     = "meraki-serve-data"
+}
+
+variable "api_stage_name" {
+  description = "Stage name for API Gateway"
+  default     = "prod"
+}
